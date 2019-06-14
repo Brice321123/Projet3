@@ -1,0 +1,379 @@
+body
+{
+    font-family: 'Lato', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+    font-weight: bold;
+}
+
+img
+{
+    max-width: 100%;
+    height: auto;
+}
+
+section
+{
+    padding: 45px 0 80px 0;
+}
+
+section .heading
+{
+    text-align: center;
+    padding-bottom: 40px;
+}
+
+.blue-divider
+{
+    width: 100px;
+    height: 2px;
+    background: #058EBE;
+    margin: 0 auto 20px;
+}
+
+.white-divider{
+    width: 100px;
+    height: 2px;
+    background: #fff;
+    margin: 0 auto 20px;
+}
+.blakc-divider {
+   
+}
+/* NAVBAR */
+
+.navbar {
+    background-color: #058EBE;
+    font-size: 13px;
+    border-bottom: 1px solid #fff;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+
+.nav-pills .nav-link{
+    color: #fff !important;
+    text-align: center;
+}
+
+.nav-pills .nav-link.active,  .nav-pills .nav-link:hover{
+    color: #058EBE !important;
+    background-color: #fff !important;
+}
+.navbar-toggler{
+    color: #fff !important;
+    border-style: none;
+
+}
+
+/*RESERVATION */
+#reservation h2 {
+    color: #058EBE;
+}
+/* BILLET */
+#billet {
+    text-align: center;
+}
+
+#billet h2 {
+    color: #058EBE;
+}
+
+/* PLANIFICATION */
+#planification{
+    background: #fff;
+}
+.planification-block{
+    width:90%;
+    margin: 0 auto;
+    text-align: center;
+    padding: 30px;
+    background: #ddd;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+    margin-bottom: 20px;
+
+}
+.planification-block h5{
+    color: #888;
+    font-size: 15px;
+    margin-top : 20px;
+    margin-bottom: 15px;
+}
+.planification-block p{
+  font-weight: bold;
+}
+
+/* INFO */
+
+#info{
+    background: #fff;
+}
+
+.info-block{
+    width:90%;
+    margin: 0 auto;
+    text-align: center;
+    padding: 30px;
+    background: #ddd;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+    margin-bottom: 20px;
+
+}
+
+.info-block h5{
+    color: #888;
+    font-size: 15px;
+    margin-top : 20px;
+    margin-bottom: 15px;
+}
+
+.info-block p{
+    margin-top :20px;
+    font-weight: bold;
+}
+
+#info img {
+    width: 300px;
+    height: 150px;
+}
+
+/* APPLI */
+
+.appli {
+    margin-top : -50px;
+    background: #fff;
+    text-align: center;
+}
+
+.container-appli {
+    
+}
+
+/*.appli img {
+    height: 50px;
+    width: 200px;
+}*/
+    
+/* PLACE TRAIN */
+
+#place-train {
+    background : #058EBE;
+    color: #fff;
+}
+
+#place-train h2 {
+    text-align: center;
+    padding-bottom: 20px;
+    color: #fff;
+}
+
+/* Ville */
+
+#ville {
+    text-align: center;
+    background-color: #058EBE;
+      text-transform: uppercase;
+}
+
+.liens a {
+    padding-right: 20px;
+}
+
+#ville h2 {
+    color: #fff;
+
+}
+
+#ville h5 .mb-0 {
+    text-transform: uppercase;
+}
+
+/*CONTACT*/
+
+#contact {
+    background: #058EBE;
+}
+
+#contact .heading h2 {
+    color: #fff;
+}
+.form-control
+{
+    height: 50px;
+    font-size: 18px;
+}
+#contact-form input[type=submit]
+{
+    margin: 40px auto 0px;
+    display: block;
+}
+.comments
+{
+    font-style: italic;
+    font-size: 18px;
+    color: #FFF;
+    height: 25px
+}
+#contact-form .thank-you
+{
+    text-align: center;
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+
+#contact-form {
+    font-size: 20px;
+    color: #fff;
+}
+
+/*WHITE DIVIDER CONTACT*/
+
+.white-divider{
+    width: 100px;
+    height: 2px;
+    background: #fff;
+    margin: 0 auto 20px;
+}
+
+ul, ol {
+    list-style: none; /* enlever les puces */
+    margin: 0; /* enlever les marges automatiques */
+}
+ 
+ul {
+    display: inline-block; /* affichage en ligne */
+}
+
+a {
+    text-decoration: none;
+}
+section .heading h2
+{
+    text-transform: uppercase;
+}
+
+/* BUTTON CONTACT */
+
+.button1
+{
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+    border: 1px solid white;
+    display: inline-block;
+    margin-top: 20px;
+    padding: 18px 50px;
+    border-radius: 3px;
+    transition: all 0.3s ease-in 0s;
+    background: transparent;
+}
+
+.button1:hover
+{
+    background: white;
+    color: #058EBE;
+    text-decoration: none;
+}
+
+/* INFO */
+
+#destination {
+    background-color: #BCE4F2;
+}
+
+#info h2 {
+    color: #058EBE;
+}
+
+/*FOOTER */
+
+footer{
+    background: #333;
+    color: #fff;
+    padding: 20px 0 40px;
+    text-align: center;
+}
+footer h5{
+    font-weight: normal;
+}
+.block1 {
+    
+}
+.newsletter {
+    float: left;
+    width: 40%;
+}
+.newsletter input {
+    width: 80%;
+}
+.reseaux {
+    margin-left: 50%;
+}
+.reseau li {
+    float: left;
+    width: auto;
+}
+
+/* RECOMMANDATIONS */
+
+#recommandations{
+    background: #fff;
+}
+
+#recommandations .heading h2{
+    color: #058EBE;
+}
+
+.fas.fa-chevron-left, .fas.fa-chevron-right{
+    background-image: none;
+    color: #058EBE;
+}
+
+.carousel-indicators{
+    bottom: 0px;
+}
+.carousel-indicators li{
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    border: 1px solid #058EBE;
+}
+.carousel-indicators li.active{
+    background-color: #058EBE;
+}
+#myCarousel .carousel-item{
+    padding: 40px 30px;
+}
+#myCarousel .carousel-item h3{
+    color: #058EBE;
+    font-style: italic;
+}
+/* inscription */
+#success_message{ display: none;}
+
+#inscription .heading h2 {
+    color : #058EBE;
+}
+#inscription button {
+    background-color : #058EBE;
+}
+
+#payement .nav-pills .nav-link{
+    color: #058EBE !important;
+    text-align: center;
+}
+
+#payement h2 {
+    color: #058EBE !important;
+}
+
+.tab-pane fade {
+    text-transform: none;
+}

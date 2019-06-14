@@ -1,0 +1,117 @@
+USE hyperloop;
+
+#========================================================================================
+# QUERY : paramères = jour,heure,gare départ, gare arrivée
+# résultats : Tous les trains directs (avec arrivée=terminus) correspondants aux critères
+#========================================================================================
+
+select * from train t,circuler c
+where t.id_tr=c.id_tr
+and c.date_ca='2019-06-18'
+and t.depart_tr >= '09:00:00'
+and t.id_ga_depart=1
+and t.id_ga_arrivee=3
+;
+#==================================================================================================================================================================
+# QUERY : paramères = jour,heure,gare départ, gare arrivée
+# résultats : Tous les trains directs avec : arrivée=terminus ou arrêt intermédiaire ou avec : départ=arrêt intermédiaire et arivée=terminus ou arrêt intermédiaire
+# correspondants aux critères avec calcul du prix pour non terminus et tri sur heure d'arrivée
+#==================================================================================================================================================================
+
+
+# ex : Train direct Lyon (4)- Avignon (5)
+
+select t.id_tr Train, ty.lib_ty Type, gd.nom_ga Départ,CONCAT(LEFT(t.depart_tr,2),'h',SUBSTRING(t.depart_tr,4,2)) Heure_départ, ga.nom_ga Arrivée, CONCAT(HOUR(t.arrivee_tr),'h',SUBSTRING(t.arrivee_tr,4,2)) Heure_arrivée,CONCAT(round(c.prix),' €') Prix
+, c.nbplacelibre Place_libre,CONCAT(HOUR(TIMEDIFF(t.arrivee_tr,t.depart_tr)),'h',SUBSTRING(TIMEDIFF(t.arrivee_tr,t.depart_tr),4,2)) Durée,gd.nom_ga venant_de,ga.nom_ga à_destination_de
+from train t,circuler c,gare gd,gare ga,type ty
+where t.id_tr=c.id_tr
+and c.date_ca='2019-06-18'
+and t.depart_tr >= '09:00:00'
+and t.id_ga_depart=4
+and t.id_ga_arrivee=5
+and gd.id_ga=t.id_ga_depart
+and ga.id_ga=t.id_ga_arrivee
+and t.id_ty=ty.id_ty
+
+UNION 
+
+# ex : Train direct Lyon (4) - Marseille avec arrivée Avignon (5)
+
+select t.id_tr, ty.lib_ty ,gd.nom_ga ,CONCAT(LEFT(t.depart_tr,2),'h',SUBSTRING(t.depart_tr,4,2)), ga.nom_ga, CONCAT(HOUR(s.arrivee_ar),'h',SUBSTRING(s.arrivee_ar,4,2)),CONCAT(round(c.prix * s.distance_ar/t.distance_tr),' €')
+, c.nbplacelibre, CONCAT(HOUR(TIMEDIFF(s.arrivee_ar,t.depart_tr)),'h',SUBSTRING(TIMEDIFF(s.arrivee_ar,t.depart_tr),4,2)),gd.nom_ga,dest.nom_ga
+from train t,circuler c,s_arreter s,gare gd,gare ga,type ty,gare dest
+where t.id_tr=c.id_tr
+and c.date_ca='2019-06-18'
+and t.depart_tr >= '09:00:00'
+and t.id_ga_depart=4
+and t.id_tr = s.id_tr and s.id_ga=5
+and gd.id_ga=t.id_ga_depart
+and ga.id_ga=s.id_ga
+and t.id_ty=ty.id_ty
+and dest.id_ga=t.id_ga_arrivee
+
+UNION 
+
+# ex : Train direct Paris - Avignon (5) avec départ Lyon (4)
+
+select t.id_tr, ty.lib_ty,gd.nom_ga,CONCAT(LEFT(s.depart_ar,2),'h',SUBSTRING(s.depart_ar,4,2)), ga.nom_ga, CONCAT(HOUR(t.arrivee_tr),'h',SUBSTRING(t.arrivee_tr,4,2)),CONCAT(round(c.prix * (t.distance_tr -s.distance_ar)/t.distance_tr),' €')
+, c.nbplacelibre, CONCAT(HOUR(TIMEDIFF(t.arrivee_tr,s.depart_ar)),'h',SUBSTRING(TIMEDIFF(t.arrivee_tr,s.depart_ar),4,2)),ve.nom_ga,ga.nom_ga
+from train t,circuler c,s_arreter s,gare gd,gare ga,type ty,gare ve
+where t.id_tr=c.id_tr
+and c.date_ca='2019-06-18'
+and s.id_ga =4 and t.id_tr=s.id_tr
+and s.depart_ar >= '09:00:00'
+and t.id_ga_arrivee=5
+and gd.id_ga=s.id_ga
+and ga.id_ga=t.id_ga_arrivee
+and t.id_ty=ty.id_ty
+and ve.id_ga=t.id_ga_depart
+
+UNION 
+
+# ex : Train direct Paris - Marseille avec départ Lyon (4) et arrivée Avignon (5)
+
+select t.id_tr, ty.lib_ty ,gd.nom_ga ,CONCAT(LEFT(sd.depart_ar,2),'h',SUBSTRING(sd.depart_ar,4,2)), ga.nom_ga, CONCAT(HOUR(sa.arrivee_ar),'h',SUBSTRING(sa.arrivee_ar,4,2)),CONCAT(round(c.prix * (sa.distance_ar -sd.distance_ar)/t.distance_tr),' €')
+, c.nbplacelibre, CONCAT(HOUR(TIMEDIFF(sa.arrivee_ar,sd.depart_ar)),'h',SUBSTRING(TIMEDIFF(sa.arrivee_ar,sd.depart_ar),4,2)),ve.nom_ga,dest.nom_ga
+from train t,circuler c,s_arreter sd,s_arreter sa,gare gd,gare ga,type ty,gare ve,gare dest
+where t.id_tr=c.id_tr
+and c.date_ca='2019-06-18'
+and sd.id_ga =4 and t.id_tr=sd.id_tr
+and sd.depart_ar >= '09:00:00'
+and sa.id_ga =5 and t.id_tr=sa.id_tr
+and gd.id_ga=sd.id_ga
+and ga.id_ga=sa.id_ga
+and t.id_ty=ty.id_ty
+and ve.id_ga=t.id_ga_depart
+and dest.id_ga=t.id_ga_arrivee
+and sa.distance_ar > sd.distance_ar /* pour éviter de prendre le train retour si même arrêt */
+order by 4 
+;
+
+#------------------------------------------------------------------------
+# Train avec correspondance  ex : Bordeaux(6)-Paris1 Paris2-Marseille (3)
+#------------------------------------------------------------------------
+
+select t1.id_tr Train_départ,ty1.lib_ty Type, gd1.nom_ga Gare_départ,t1.depart_tr Heure_départ,t1.arrivee_tr Heure_arrivée, ga1.nom_ga Gare_arrivée
+ ,(REPLACE(REPLACE(fc.changementgare,1,'Oui'),0,'Non')) Changer_gare
+ ,t2.id_tr Train_correspondance,ty2.lib_ty Type, gd2.nom_ga Gare_départ,t2.depart_tr Heure_départ,t2.arrivee_tr Heure_arrivée, ga2.nom_ga Gare_arrivée
+ ,(c1.prix + c2.prix) Prix
+from train t1,circuler c1,type ty1,gare gd1,gare ga1,gare gd2,gare ga2,type ty2,faire_correspondance fc,train t2,circuler c2
+where t1.id_tr=c1.id_tr
+and c1.date_ca='2019-06-18'
+and t1.depart_tr >= '06:00:00'
+and t1.id_ga_depart=6
+and t1.id_tr=fc.id_tr
+and t1.id_ty=ty1.id_ty
+and t2.id_tr=fc.id_tr_Train
+and t2.id_ga_arrivee=3
+and t2.id_tr=c2.id_tr
+and c1.date_ca=c2.date_ca
+and t1.id_ga_depart=gd1.id_ga
+and t1.id_ga_arrivee=ga1.id_ga
+and t2.id_ga_depart=gd2.id_ga
+and t2.id_ga_arrivee=ga2.id_ga
+and t2.id_ty=ty2.id_ty
+
+order by 4
+;

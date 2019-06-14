@@ -1,0 +1,311 @@
+#------------------------------------------------------------
+#        Script MySQL.
+#------------------------------------------------------------
+
+DROP DATABASE IF EXISTS hyperloop;
+CREATE DATABASE hyperloop;
+USE hyperloop;
+
+#------------------------------------------------------------
+# Table: Billet
+#------------------------------------------------------------
+
+CREATE TABLE Billet(
+        id_bi Int NOT NULL Auto_increment,
+        iduser Int(5) NOT NULL,
+        texte_bi    Varchar (1000),
+        PRIMARY KEY (id_bi)
+);
+
+
+#------------------------------------------------------------
+# Table: Utilisateur
+#------------------------------------------------------------
+
+CREATE TABLE Utilisateur(
+        iduser Int(5) NOT NULL Auto_increment,
+        login  Varchar (50),
+        mdp    Varchar (50),
+        nom    Varchar (50),
+        prenom Varchar (50),
+	genre  Varchar (50),
+	numero Int(10),
+	naissance Date,
+        PRIMARY KEY (iduser)
+);
+
+#------------------------------------------------------------
+# Table: Type
+#------------------------------------------------------------
+
+CREATE TABLE Type(
+        id_ty  Int  Auto_increment  NOT NULL ,
+        lib_ty Varchar (50) NOT NULL
+	,CONSTRAINT Type_PK PRIMARY KEY (id_ty)
+)ENGINE=InnoDB;
+
+#------------------------------------------------------------
+# Table: Gare
+#------------------------------------------------------------
+
+CREATE TABLE Gare(
+        id_ga      Int  Auto_increment  NOT NULL ,
+        nom_ga     Varchar (30) NOT NULL ,
+        adresse_ga Varchar (300) NOT NULL
+	,CONSTRAINT Gare_PK PRIMARY KEY (id_ga)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: Train
+#------------------------------------------------------------
+
+
+CREATE TABLE Train(
+        id_tr       Int NOT NULL ,
+        etage_tr    Smallint NOT NULL ,
+        depart_tr   Time NOT NULL ,
+        arrivee_tr  Time NOT NULL ,
+        distance_tr Smallint NOT NULL ,
+        id_ty       Int NOT NULL ,
+        id_ga_depart Int NOT NULL ,
+        id_ga_arrivee  Int NOT NULL
+	,CONSTRAINT Train_PK PRIMARY KEY (id_tr)
+
+	,CONSTRAINT Train_Type_FK FOREIGN KEY (id_ty) REFERENCES Type(id_ty)
+	,CONSTRAINT Train_Gare0_FK FOREIGN KEY (id_ga_depart) REFERENCES Gare(id_ga)
+	,CONSTRAINT Train_Gare1_FK FOREIGN KEY (id_ga_arrivee) REFERENCES Gare(id_ga)
+)ENGINE=InnoDB;
+
+#------------------------------------------------------------
+# Table: Calendrier
+#------------------------------------------------------------
+
+CREATE TABLE Calendrier(
+        date_ca Date NOT NULL ,
+        lib_ca  Varchar (30)
+	,CONSTRAINT Calendrier_PK PRIMARY KEY (date_ca)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: Reservation
+#------------------------------------------------------------
+
+
+CREATE TABLE Reservation(
+        id_re              Int  Auto_increment  NOT NULL ,
+        nbvoyageur_re      Smallint NOT NULL ,
+        allerretour_re     Tinyint(1) NOT NULL ,
+        date_ca            Date NOT NULL ,
+        id_tr              Int NOT NULL ,
+        id_tr_Train        Int ,
+        date_ca_Calendrier Date
+	,CONSTRAINT Reservation_PK PRIMARY KEY (id_re)
+
+	,CONSTRAINT Reservation_Calendrier_FK FOREIGN KEY (date_ca) REFERENCES Calendrier(date_ca)
+	,CONSTRAINT Reservation_Train0_FK FOREIGN KEY (id_tr) REFERENCES Train(id_tr)
+	,CONSTRAINT Reservation_Train1_FK FOREIGN KEY (id_tr_Train) REFERENCES Train(id_tr)
+	,CONSTRAINT Reservation_Calendrier2_FK FOREIGN KEY (date_ca_Calendrier) REFERENCES Calendrier(date_ca)
+)ENGINE=InnoDB;
+
+#------------------------------------------------------------
+# Table: Voyageur
+#------------------------------------------------------------
+
+CREATE TABLE Voyageur(
+        id_vo        Int  Auto_increment  NOT NULL ,
+        nom_vo       Varchar (50) NOT NULL ,
+        reduction_vo Smallint ,
+        id_re        Int NOT NULL
+	,CONSTRAINT Passager_PK PRIMARY KEY (id_vo)
+
+	,CONSTRAINT Passager_Reservation_FK FOREIGN KEY (id_re) REFERENCES Reservation(id_re)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: Circuler
+#------------------------------------------------------------
+
+CREATE TABLE Circuler(
+        date_ca      Date NOT NULL ,
+        id_tr        Int NOT NULL ,
+        nbplacetotal Smallint ,
+        nbplacelibre Smallint ,
+        prix         Decimal (9,2) NOT NULL
+	,CONSTRAINT Circuler_PK PRIMARY KEY (date_ca,id_tr)
+
+	,CONSTRAINT Circuler_Calendrier_FK FOREIGN KEY (date_ca) REFERENCES Calendrier(date_ca)
+	,CONSTRAINT Circuler_Train0_FK FOREIGN KEY (id_tr) REFERENCES Train(id_tr)
+)ENGINE=InnoDB;
+
+#------------------------------------------------------------
+# Table: Incident
+#------------------------------------------------------------
+
+CREATE TABLE Incident(
+        id_in      Int  Auto_increment  NOT NULL ,
+        debut_in   Date NOT NULL ,
+        fin_in     Date NOT NULL ,
+        libelle_in Varchar (100) NOT NULL ,
+        id_tr      Int NOT NULL
+	,CONSTRAINT Incident_PK PRIMARY KEY (id_in)
+
+	,CONSTRAINT Incident_Train_FK FOREIGN KEY (id_tr) REFERENCES Train(id_tr)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: s'arreter
+#------------------------------------------------------------
+
+CREATE TABLE s_arreter(
+        id_ga       Int NOT NULL ,
+        id_tr       Int NOT NULL ,
+        arrivee_ar  Time NOT NULL ,
+        depart_ar   Time NOT NULL ,
+        distance_ar Smallint NOT NULL
+	,CONSTRAINT s_arreter_PK PRIMARY KEY (id_ga,id_tr)
+
+	,CONSTRAINT s_arreter_Gare_FK FOREIGN KEY (id_ga) REFERENCES Gare(id_ga)
+	,CONSTRAINT s_arreter_Train0_FK FOREIGN KEY (id_tr) REFERENCES Train(id_tr)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: faire correspondance
+#------------------------------------------------------------
+
+CREATE TABLE faire_correspondance(
+        id_tr          Int NOT NULL ,
+        id_tr_Train    Int NOT NULL ,
+        changementgare Tinyint(1) NOT NULL
+	,CONSTRAINT faire_correspondance_PK PRIMARY KEY (id_tr,id_tr_Train)
+
+	,CONSTRAINT faire_correspondance_Train_FK FOREIGN KEY (id_tr) REFERENCES Train(id_tr)
+	,CONSTRAINT faire_correspondance_Train0_FK FOREIGN KEY (id_tr_Train) REFERENCES Train(id_tr)
+)ENGINE=InnoDB;
+
+#===========================
+# INSERT
+#===========================
+
+insert into Utilisateur values 
+(null, "admin", "admin", "Administrateur", "Administrateur", "MR", "0000000000", "2000-01-01"),
+(null, "nathan", "nathan", "Podesta", "Nathan", "MR", "0694554321", "2000-02-15"),
+(null, "brice", "brice", "Bedot", "Brice", "MR", "0692344321", "1999-04-19");
+
+INSERT INTO type VALUES 
+(1,'HYPERLOOP'),
+(2,'TGV'),
+(3,'TER'),
+(4,'idTGV');
+
+INSERT INTO gare VALUES 
+(1,'PARIS Lyon','Quai de la rapée 75012 PARIS'),
+(2,'PARIS Montparnasse','75014 PARIS'),
+(3,'MARSEILLE','13001 MARSEILLE'),
+(4,'Lyon-Saint-Exupéry TGV','Gare TGV Lyon Saint-Exupéry 69125 Colombier-Saugnieu'),
+(5,'AVIGNON TGV','84000 AVIGNON'),
+(6,'BORDEAUX TGV','33000 BORDEAUX'),
+(7,'NICE TGV','Gare TGV de Nice 06000 NICE'),
+(8,'Saintes','17000 Saintes'),
+(9,'Valence','26000 Valence');
+
+INSERT INTO train  VALUES 
+(9001, 2, '10:00:00', '11:04:00', 1000, 1, 1, 3),
+(9003, 2, '11:00:00', '12:00:00', 1000, 1, 1, 3),
+(9005, 2, '12:00:00', '13:00:00', 1000, 1, 1, 3),
+(9002, 2, '12:00:00', '13:00:00', 1000, 1, 3, 1),
+(9004, 2, '13:00:00', '14:00:00', 1000, 1, 3, 1),
+(9006, 2, '14:00:00', '15:00:00', 1000, 1, 3, 1),
+(8001, 1, '10:00:00', '13:15:00', 1000, 2, 1, 3),
+(8002, 1, '07:00:00', '09:00:00', 700, 2, 6, 2),
+(8003, 1, '06:00:00', '08:00:00', 450, 2, 1, 4),
+(8005, 1, '10:00:00', '11:20:00', 350, 4, 4, 3),
+(8007, 1, '11:00:00', '13:55:00', 700, 2, 1, 5),
+(8004, 1, '08:00:00', '12:00:00', 750, 2, 6, 3),
+(8006, 1, '15:00:00', '17:00:00', 360, 4, 3, 7),
+(8008, 1, '20:00:00', '21:30:00', 350, 4, 3, 4),
+(8009, 1, '10:00:00', '13:10:00', 1000, 2, 3, 1),
+(65001, 1, '9:55:00', '12:00:00', 250, 3, 4, 5),
+(65002, 1, '13:00:00', '16:10:00', 350, 3, 3, 4),
+(65003, 1, '10:00:00', '20:00:00', 1000, 3, 1, 3),
+(66001, 1, '08:00:00', '09:00:00', 80, 3, 8, 6);
+
+INSERT INTO s_arreter VALUES 
+(4,8001,'12:00:00', '12:05:00',450),
+(5,8001,'12:50:00', '12:55:00',700),
+(5,8005,'10:55:00', '11:00:00',250),
+(4,8007,'13:00:00', '13:05:00',450),
+(5,8008,'20:30:00', '20:35:00',100),
+(5,8009,'10:30:00', '10:35:00',100),
+(4,9001,'10:27:00', '10:30:00',450),
+(5,9001,'10:45:00', '10:48:00',700),
+(9,65001,'10:55:00', '11:00:00',110),
+(5,65002,'14:00:00', '14:05:00',110),
+(9,65002,'15:15:00', '15:20:00',250),
+(4,65003,'15:15:00', '15:20:00',400),
+(5,65003,'15:15:00', '15:20:00',700);
+
+INSERT INTO calendrier VALUES 
+('2019-06-18','Test'),
+('2019-01-02',null),
+('2019-01-03',null),
+('2019-01-05',null),
+('2019-01-06',null),
+('2019-01-07',null),
+('2019-01-08',null),
+('2019-01-11',null),
+('2019-01-12',null),
+('2019-01-13',null),
+('2019-01-14','Prix special'),
+('2019-01-15',null);
+
+INSERT INTO circuler VALUES 
+('2019-06-18',8001,100,5,55.50),
+('2019-01-02',8001,100,100,30),
+('2019-01-03',8001,100,100,30),
+('2019-01-05',8001,100,100,30),
+('2019-01-06',8001,100,100,35),
+('2019-01-14',8001,100,100,20),
+('2019-01-15',8001,100,100,30),
+('2019-06-18',8002,100,100,70),
+('2019-01-02',8002,100,100,50),
+('2019-01-03',8002,100,100,50),
+('2019-01-07',8002,200,200,45),
+('2019-06-18',8005,100,100,30),
+('2019-06-18',8006,100,1,60),
+('2019-06-18',8007,100,10,60),
+('2019-06-18',8008,100,3,30),
+('2019-06-18',8009,100,100,60),
+('2019-06-18',65001,null,null,12),
+('2019-06-18',65002,null,null,20),
+('2019-06-18',65003,null,null,100),
+('2019-06-18',9001,200,200,350),
+('2019-01-02',9001,200,199,250),
+('2019-01-14',9001,200,200,150),
+('2019-06-18',9002,200,200,260),
+('2019-01-05',9002,200,199,260),
+('2019-06-18',9003,200,200,360),
+('2019-01-02',9003,200,200,250),
+('2019-06-18',9005,200,200,360),
+('2019-01-02',9005,200,200,250);
+
+INSERT INTO incident VALUES 
+(null,'2019-01-06','2019-01-10','Changer moteur',8001);
+
+INSERT INTO faire_correspondance VALUES 
+(8002,9001,true);
+
+#=========================== ne pas initialiser
+#INSERT INTO reservation VALUES 
+#(1,2,false,'2019-06-18',8001,null,null),
+#(2,1,true,'2019-01-02',9001,9002,'2019-01-05');
+#
+#INSERT INTO voyageur VALUES 
+#(null,'nom1',null,1), 
+#(null,'nom2',50,1),
+#(null,'Dupont',null,2);
+#=========================== 

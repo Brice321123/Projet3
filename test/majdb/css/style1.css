@@ -1,0 +1,182 @@
+f/*GENERAL*/
+
+body
+{
+	font-family: 'Lato', sans-serif;
+	
+}
+
+h1, h2, h3, h4, h6
+{
+	font-weight: bold;
+	
+}
+
+section
+{
+	padding: 45px 0 80px 0;
+}
+
+section .heading
+{
+	text-align: center;
+	padding-bottom: 40px;
+}
+
+section .heading h2
+{
+	text-transform: uppercase;
+}
+
+.red-divider
+{
+	width: 100px;
+    height: 2px;
+    background: #d82c2e;
+    margin: 0 auto 20px;
+}
+
+.white-divider{
+    width: 100px;
+    height: 2px;
+    background: #fff;
+    margin: 0 auto 20px;
+}
+
+ul, ol
+{
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+.button1
+{
+	font-weight: bold;
+	text-transform: uppercase;
+	color: white;
+	border: 1px solid white;
+	display: inline-block;
+	margin-top: 20px;
+	padding: 18px 50px;
+	border-radius: 3px;
+	transition: all 0.3s ease-in 0s;
+	background: transparent;
+}
+
+.button1:hover
+{
+	background: white;
+    color: #d82c2e;
+    text-decoration: none;
+}
+
+/* MENU */
+.navbar {
+    background-color: #d82c2e;
+    font-size: 13px;
+    border-bottom: 1px solid #fff;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+
+.nav-pills .nav-link{
+    color: #fff !important;
+    text-align: center;
+}
+
+.nav-pills .nav-link.active,  .nav-pills .nav-link:hover{
+    color: #d82c2e !important;
+    background-color: #fff !important;
+}
+.navbar-toggler{
+    color: #fff !important;
+    border-style: none;
+
+}
+
+/* FOOTER */
+
+footer {
+    /*position: fixed;*/
+    left: 0px;
+    bottom: 0px;
+    height: 35px;
+    width: 100%;
+    padding-bottom: 100px;
+}
+
+.black-divider {
+  width: 100%;
+  height: 1px;
+  background: #DCDCDC;
+  margin: 0 auto 20px;
+}
+
+footer h5 {
+  padding-top: 5px;
+  font-size: 23px;
+}
+
+/*SEARCH */
+
+
+#myInput {
+  background-image: url('../images/search_icon.png');
+  background-position: 10px 12px; /* Position the search icon */
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  width: 100%; /* Full-width */
+  font-size: 16px; /* Increase font-size */
+  padding: 12px 20px 12px 40px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+}
+
+#myTable {
+  border-collapse: collapse; /* Collapse borders */
+  width: 100%; /* Full-width */
+  border: 1px solid #ddd; /* Add a grey border */
+  font-size: 18px; /* Increase font-size */
+}
+
+#myTable th, #myTable td {
+  text-align: left; /* Left-align text */
+  padding: 12px; /* Add padding */
+}
+
+#myTable tr {
+  /* Add a bottom border to all table rows */
+  border-bottom: 1px solid #ddd; 
+}
+
+#myTable tr.header, #myTable tr:hover {
+  /* Add a grey background color to the table header and on hover */
+  background-color: #f1f1f1;
+}
+
+/* SELECT */
+
+.supprimer {
+    background-color: #f1f1f1;
+    padding-left: 80px;
+    padding-right: 80px;
+}
+
+.insert {
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+.select {
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+
+
+
+
